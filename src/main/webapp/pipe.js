@@ -68,7 +68,7 @@ function refreshPipelines(data, divNames, errorDiv, view, showAvatars, showChang
                 } else {
                     html.push('&nbsp;<a id=\'startpipeline-' + c  +'\' class="task-icon-link" href="#" onclick="triggerBuild(\'' + component.firstJobUrl + '\', \'' + data.name + '\');">');
                 }
-                html.push('<img class="icon-clock icon-md" title="Build now" src="' + resURL + '/images/24x24/clock.png">');
+                    html.push('<img class="icon-clock icon-md" title="Build now" src="' + resURL + '/images/24x24/clock.png">');
                 html.push("</a>");
             }
             html.push("</h1>");
@@ -182,7 +182,11 @@ function refreshPipelines(data, divNames, errorDiv, view, showAvatars, showChang
                         html.push("<div id=\"" + id + "\" class=\"status stage-task " + task.status.type +
                             "\"><div class=\"task-progress " + progressClass + "\" style=\"width: " + progress + "%;\"><div class=\"task-content\">" +
                             "<div class=\"task-header\"><div class=\"taskname\"><a href=\"" + getLink(data, task.link) + "\">" + htmlEncode(task.name) + "</a></div>");
-                        if (data.allowManualTriggers && task.manual && task.manualStep.enabled && task.manualStep.permission) {
+                        if (data.allowManualTriggers &&
+                            task.manual &&
+                            task.manualStep.enabled &&
+                            task.manualStep.permission) {
+
                             html.push('<div class="task-manual" id="manual-' + id + '" title="Trigger manual build" onclick="triggerManual(\'' + id + '\', \'' + task.id + '\', \'' + task.manualStep.upstreamProject + '\', \'' + task.manualStep.upstreamId + '\');">');
                             html.push("</div>");
                         } else {
@@ -195,12 +199,16 @@ function refreshPipelines(data, divNames, errorDiv, view, showAvatars, showChang
                         html.push('</div><div class="task-details">');
 
                         if (timestamp != "") {
-                            html.push("<div id=\"" + id + ".timestamp\" class='timestamp'>" + timestamp + "</div>");
+                            html.push('<div id="' + id + '.timestamp" class="timestamp">' + timestamp + "</div>");
                         }
 
                         if (task.status.duration >= 0) {
-                            html.push("<div class='duration'>" + formatDuration(task.status.duration) + "</div>");
+                            html.push('<div class="duration">' + formatDuration(task.status.duration) + "</div>");
                         }
+
+                        html.push('<div class="console">')
+                        html.push("<img onclick=\"fillDialog('" + getLink(data, task.link) + "consoleText', 'Console output for ')\" src=\"" + resURL + "/images/16x16/terminal.png\">")
+                        html.push('</div>')
 
                         html.push("</div></div></div></div>");
 
@@ -286,6 +294,20 @@ function refreshPipelines(data, divNames, errorDiv, view, showAvatars, showChang
         }
     }
     plumb.repaintEverything();
+}
+
+
+function fillDialog(href, title) {
+    jQuery.fancybox({
+			type: 'iframe',
+			title: title,
+			titlePosition: 'outside',
+			href: href,
+			transitionIn : 'elastic',
+			transitionOut : 'elastic',
+			width: '90%',
+			height: '80%'
+		});
 }
 
 function generateDescription(data, task) {

@@ -1,9 +1,16 @@
 .timestamp {
     font-size: 9px;
+    float: left
 }
 
 .duration {
     font-size: 9px;
+    float: left
+}
+
+.console {
+    margin-left: 20px;
+    float: left;
 }
 
 div.taskname {
